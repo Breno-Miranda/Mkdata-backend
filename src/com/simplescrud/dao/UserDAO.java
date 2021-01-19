@@ -229,15 +229,21 @@ public class UserDAO {
 			
 	}
 	
-public void deleteUser (int id) throws Exception {
+	public void deleteUser (int id) throws Exception {
 		
 		Connection conn  = BDConfig.getConnection();
 		
-		String query = "DELETE FROM tbusers WHERE id = ?";
+		String queryPhone = "DELETE FROM tbphoneusers WHERE userId = ?";
 		
-		PreparedStatement stat =  conn.prepareStatement(query);
-		stat.setInt(1,  id);
-		stat.execute();
+		PreparedStatement statPhone =  conn.prepareStatement(queryPhone);
+		statPhone.setInt(1,  id);
+		statPhone.execute();
+		
+		String queryUser = "DELETE FROM tbusers WHERE id = ?";
+		
+		PreparedStatement statUser =  conn.prepareStatement(queryUser);
+		statUser.setInt(1,  id);
+		statUser.execute();
 		
 	}
 
