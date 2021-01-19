@@ -144,10 +144,13 @@ public class UserService {
 		String message = "";
 	
 		try {
-			message =  "{\"message\":\"Usuário cadastrado com sucesso.\"}";
-			userDAO.addingUser(user);
+			if(userDAO.addingUser(user)) {
+				message =  "{\"message\":\"Usuário cadastrado com sucesso.\" , \"error\":\"false\"}";
+			} else {
+				message =  "{\"message\":\"Usuário existente. \", \"error\":\"true\"}";
+			}
 		} catch (Exception e) {
-			message =  "{\"message\":\"Error ao cadastrar novo usuário.\"}";
+			message = "{\"message\":\"Error ao cadastrar Usuário. \", \"error\":\"true\"}";
 			e.printStackTrace();
 		}
 		

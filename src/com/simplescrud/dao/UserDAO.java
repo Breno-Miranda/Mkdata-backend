@@ -147,47 +147,66 @@ public class UserDAO {
 	
 	
 	
-	public void addingUser (User user) throws Exception {
+	public boolean addingUser (User user) throws Exception {
 		
 		Connection conn  = BDConfig.getConnection();
 		
-		String query = "INSERT INTO tbusers (name, cpfcnpj, type, rgie, isactive ) VALUES (? , ? , ? , ? , ?)";
+		PreparedStatement statIsvarify =  conn.prepareStatement("SELECT * FROM tbusers where cpfcnpj = ? limit 1");    
+		statIsvarify.setString(1, user.getCpfcnpj());
 		
-		PreparedStatement stat =  conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-		stat.setString(1 , user.getName());
-		stat.setString(2 , user.getCpfcnpj());
-		stat.setString(3 , user.getType());
-		stat.setString(4 , user.getRgie());
-		stat.setBoolean(5, user.getIsactive());
-		stat.execute();
+		ResultSet getrs = statIsvarify.executeQuery();
 		
-		ResultSet res = stat.getGeneratedKeys();
-		
-		if (res.next()) {
+		if(getrs.next()) {
+			System.out.println("usuario já existe");
 			
-		    int id = res.getInt(1);
-		    
-		    System.out.println("Inserted ID -" + id); 
-		    
-		    String queryPhone = "INSERT INTO tbphoneusers (userId, areacode, phone,  ismain) VALUES (? , ? , ?, ?)";
+			return false;
 			
-			PreparedStatement statPhone =  conn.prepareStatement(queryPhone);
+		} else {
 			
-			 Iterator<Phone> phonesAsIterator = user.getPhones().iterator();
-	         while (phonesAsIterator.hasNext()){
-	        	 	Phone it = phonesAsIterator.next();
-					statPhone.setInt(1, id);
-					statPhone.setString(2, it.getAreacode());
-					statPhone.setString(3, it.getPhone());
-					statPhone.setBoolean(4, it.getIsmain());
-					statPhone.addBatch();
-					
-	        	 	System.out.println("Areacode -" + it.getAreacode()); 
-	        	 	
-	         }
-	         
-	         statPhone.executeBatch();
+			System.out.println("usuario não existe");
+			
+			String query = "INSERT INTO tbusers (name, cpfcnpj, type, rgie, isactive ) VALUES (? , ? , ? , ? , ?)";
+			
+			PreparedStatement stat =  conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			stat.setString(1 , user.getName());
+			stat.setString(2 , user.getCpfcnpj());
+			stat.setString(3 , user.getType());
+			stat.setString(4 , user.getRgie());
+			stat.setBoolean(5, user.getIsactive());
+			stat.execute();
+			
+			ResultSet res = stat.getGeneratedKeys();
+			
+			if (res.next()) {
+				
+			    int id = res.getInt(1);
+			    
+			    System.out.println("Inserted ID -" + id); 
+			    
+			    String queryPhone = "INSERT INTO tbphoneusers (userId, areacode, phone,  ismain) VALUES (? , ? , ?, ?)";
+				
+				PreparedStatement statPhone =  conn.prepareStatement(queryPhone);
+				
+				 Iterator<Phone> phonesAsIterator = user.getPhones().iterator();
+		         while (phonesAsIterator.hasNext()){
+		        	 	Phone it = phonesAsIterator.next();
+						statPhone.setInt(1, id);
+						statPhone.setString(2, it.getAreacode());
+						statPhone.setString(3, it.getPhone());
+						statPhone.setBoolean(4, it.getIsmain());
+						statPhone.addBatch();
+						
+		        	 	System.out.println("Areacode -" + it.getAreacode()); 
+		        	 	
+		         }
+		         
+		         statPhone.executeBatch();
+			}
+			
+			return true;
 		}
+		
+
 	}
 	
 	public void updateUser (User user, int id) throws Exception {
