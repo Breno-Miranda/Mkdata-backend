@@ -117,10 +117,10 @@ public class UserDAO {
 		
 		Connection conn  = BDConfig.getConnection();
 		
-		String query = "SELECT * FROM tbusers WHERE  name like %?% limit ?";
+		String query = "SELECT * FROM tbusers WHERE  name like ? limit ?";
 		
 		PreparedStatement stat = conn.prepareStatement(query);
-		stat.setString(1 , name);
+		stat.setString(1 , '%' + name + '%' );
 		stat.setInt(2 , limit);
 		
 		

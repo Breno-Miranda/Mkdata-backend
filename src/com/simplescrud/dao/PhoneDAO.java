@@ -37,5 +37,22 @@ public class PhoneDAO {
 		return phones;
 	}
 	
+	public void addingPhone (Phone phone, int id) throws Exception {
+		
+		Connection conn  = BDConfig.getConnection();
+		
+	    String queryPhone = "INSERT INTO tbphoneusers (userId, areacode, phone,  ismain) VALUES (? , ? , ?, ?)";
+		
+		PreparedStatement stat =  conn.prepareStatement(queryPhone);
+		
+		stat.setInt(1, id);
+		stat.setString(2, phone.getAreacode());
+		stat.setString(3, phone.getPhone());
+		stat.setBoolean(4, phone.getIsmain());
+				
+		System.out.println("Areacode -" + phone.getAreacode()); 
+	    	 	
+	   stat.execute();
+	}
 
 }

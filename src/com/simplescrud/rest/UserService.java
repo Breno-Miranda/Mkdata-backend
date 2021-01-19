@@ -116,6 +116,24 @@ public class UserService {
 		return phones;
 	}
 	
+	@POST
+	@Path("/phone/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addUserPhone(Phone phone, @PathParam("id") int id) throws Exception {
+		
+		String message = "";
+	
+		try {
+			message =  "{\"message\":\"Telefone do Usuário cadastrado com sucesso.\"}";
+			phoneDAO.addingPhone(phone, id);
+		} catch (Exception e) {
+			message =  "{\"message\":\"Error ao cadastrar novo Telefone para usuário.\"}";
+			e.printStackTrace();
+		}
+		
+		return Response.status(200).entity(message).build();
+	}
 	
 	@POST
 	@Path("/")
