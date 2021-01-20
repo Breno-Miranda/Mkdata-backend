@@ -228,23 +228,41 @@ public class UserDAO {
 		System.out.println(stat.toString());
 		
 	    String queryPhone = "UPDATE tbphoneusers set areacode = ?, phone = ?, ismain = ? WHERE id = ?";
-		
+	    
 		PreparedStatement statPhone =  conn.prepareStatement(queryPhone);
+		
+		 String queryPhoneInsert = "INSERT INTO tbphoneusers (userId, areacode, phone,  ismain) VALUES (? , ? , ?, ?)";
+		 
+		 PreparedStatement statPhoneinsert =  conn.prepareStatement(queryPhoneInsert);
 		
 		 Iterator<Phone> phonesAsIterator = user.getPhones().iterator();
          while (phonesAsIterator.hasNext()){
+        	 	
+        	 
         	 	Phone it = phonesAsIterator.next();
-				statPhone.setString(1, it.getAreacode());
-				statPhone.setString(2, it.getPhone());
-				statPhone.setBoolean(3, it.getIsmain());
-				statPhone.setInt(4, it.getId());
-				statPhone.addBatch();
+        	 	
+        	 	if(it.getId() == 0) {
+        	 		statPhoneinsert.setInt(1, id);
+        	 		statPhoneinsert.setString(2, it.getAreacode());
+        	 		statPhoneinsert.setString(3, it.getPhone());
+        	 		statPhoneinsert.setBoolean(4, it.getIsmain());
+        	 		statPhoneinsert.addBatch();
+        	 	} else {
+        	 		statPhone.setString(1, it.getAreacode());
+    				statPhone.setString(2, it.getPhone());
+    				statPhone.setBoolean(3, it.getIsmain());
+    				statPhone.setInt(4, it.getId());
+    				statPhone.addBatch();
+        	 	}
+				
 				
         	 	System.out.println("Areacode -" + it.getAreacode()); 
         	 	
          }
          
          statPhone.executeBatch();
+         statPhoneinsert.executeBatch();
+
 			
 	}
 	
