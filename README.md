@@ -15,7 +15,7 @@
 Só precisa de alguns passo:
 
 ```sh
-$ gir clone url_do_projeto
+$ git clone url_do_projeto
 
 ```
 
