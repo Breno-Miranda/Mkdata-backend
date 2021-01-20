@@ -25,29 +25,29 @@ $ git clone url_do_projeto
 
 
 ```sh
-create database jetecommerce;
+create database simplescrud;
 
 use simplescrud;
 
 
 create table tbusers(
-	  id int not null auto_increment primary key,
+    id int not null auto_increment primary key,
     name varchar(150) not null,
     cpfcnpj varchar(50) not null,
     type varchar(15) not null,
     rgie  varchar(50) not null,
     isactive int not null default 0,
-	  created_at timestamp not null
+    created_at timestamp not null
 )ENGINE=InnoDB AUTO_INCREMENT=1;
 
 create table tbphoneusers(
-	  id int not null auto_increment primary key,
+    id int not null auto_increment primary key,
     userId int not null,
     areacode int(2) not null,
     phone varchar(150) not null,
-	  ismain int not null default 0,
+    ismain int not null default 0,
     created_at timestamp not null,
-	constraint fk_Users foreign key (userId) references tbusers(id)
+constraint fk_Users foreign key (userId) references tbusers(id)
 )ENGINE=InnoDB AUTO_INCREMENT=1;
 
 ```
@@ -59,7 +59,6 @@ Os Plugins utilizados foram:
 
 | Plugin |
 | ------ | 
-| java ee |
 | maven |
 | jersey |
 | tomcat 8.5 |
