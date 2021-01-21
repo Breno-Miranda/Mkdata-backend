@@ -54,5 +54,23 @@ public class PhoneDAO {
 	    	 	
 	   stat.execute();
 	}
+	
+	public void deletePhone (int id) throws Exception {
+		
+		Connection conn  = BDConfig.getConnection();
+		
+		String queryPhone = "DELETE FROM tbphoneusers WHERE id = ?";
+		
+		PreparedStatement statPhone =  conn.prepareStatement(queryPhone);
+		statPhone.setInt(1,  id);
+		statPhone.execute();
+		
+		String queryUser = "DELETE FROM tbusers WHERE id = ?";
+		
+		PreparedStatement statUser =  conn.prepareStatement(queryUser);
+		statUser.setInt(1,  id);
+		statUser.execute();
+		
+	}
 
 }

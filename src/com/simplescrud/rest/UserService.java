@@ -142,15 +142,21 @@ public class UserService {
 	public Response addUser(User user) throws Exception {
 		
 		String message = "";
+		Boolean isVerify = true;
 	
 		try {
-			if(userDAO.addingUser(user)) {
-				message =  "{\"message\":\"Usuário cadastrado com sucesso.\" , \"error\":\"false\"}";
+			
+			isVerify = userDAO.addingUser(user);
+			
+			System.out.println(isVerify);
+			
+			if(isVerify) {
+				message =  "{\"message\":\"Usuário cadastrado com sucesso.\" , \"error\":false}";
 			} else {
-				message =  "{\"message\":\"Usuário existente. \", \"error\":\"true\"}";
+				message =  "{\"message\":\"Usuário existente. \", \"error\":true}";
 			}
 		} catch (Exception e) {
-			message = "{\"message\":\"Error ao cadastrar Usuário. \", \"error\":\"true\"}";
+			message = "{\"message\":\"Error ao cadastrar Usuário. \", \"error\":true}";
 			e.printStackTrace();
 		}
 		
@@ -191,6 +197,26 @@ public class UserService {
 		} catch (Exception e) {
 			
 			message =  "{\"message\":\"Error ao deletar usuário.\"}";
+			e.printStackTrace();
+		}
+		return message;
+	}
+	
+	@DELETE
+	@Path("phone/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deletePhone(@PathParam("id")int id) throws Exception{
+		
+		String message = "";
+		
+		try {
+			phoneDAO .deletePhone(id);
+			
+			message =  "{\"message\":\"Telfone Usuário deletado com sucesso.\" , \"error\":false}";
+			
+		} catch (Exception e) {
+			
+			message =  "{\"message\":\"Error ao deletar telefone usuário.\", \"error\":true}";
 			e.printStackTrace();
 		}
 		return message;

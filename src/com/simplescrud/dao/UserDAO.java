@@ -157,13 +157,14 @@ public class UserDAO {
 		ResultSet getrs = statIsvarify.executeQuery();
 		
 		if(getrs.next()) {
-			System.out.println("usuario já existe");
+			
+//			System.out.println("usuario já existe");
 			
 			return false;
 			
 		} else {
 			
-			System.out.println("usuario não existe");
+//			System.out.println("usuario não existe");
 			
 			String query = "INSERT INTO tbusers (name, cpfcnpj, type, rgie, isactive ) VALUES (? , ? , ? , ? , ?)";
 			
@@ -228,20 +229,20 @@ public class UserDAO {
 		System.out.println(stat.toString());
 		
 	    String queryPhone = "UPDATE tbphoneusers set areacode = ?, phone = ?, ismain = ? WHERE id = ?";
-	    
 		PreparedStatement statPhone =  conn.prepareStatement(queryPhone);
 		
 		 String queryPhoneInsert = "INSERT INTO tbphoneusers (userId, areacode, phone,  ismain) VALUES (? , ? , ?, ?)";
-		 
 		 PreparedStatement statPhoneinsert =  conn.prepareStatement(queryPhoneInsert);
 		
 		 Iterator<Phone> phonesAsIterator = user.getPhones().iterator();
+		 
+		 Boolean isNew = false;
+		 
          while (phonesAsIterator.hasNext()){
-        	 	
-        	 
         	 	Phone it = phonesAsIterator.next();
         	 	
         	 	if(it.getId() == 0) {
+        	 		isNew = true;
         	 		statPhoneinsert.setInt(1, id);
         	 		statPhoneinsert.setString(2, it.getAreacode());
         	 		statPhoneinsert.setString(3, it.getPhone());
@@ -256,14 +257,17 @@ public class UserDAO {
         	 	}
 				
 				
-        	 	System.out.println("Areacode -" + it.getAreacode()); 
+//        	 	System.out.println("Areacode -" + it.getId()); 
         	 	
          }
          
-         statPhone.executeBatch();
-         statPhoneinsert.executeBatch();
-
-			
+         
+         if(isNew) {
+        	 statPhoneinsert.executeBatch();
+         } else {
+        	 statPhone.executeBatch();
+         }
+         
 	}
 	
 	public void deleteUser (int id) throws Exception {
